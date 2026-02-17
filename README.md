@@ -30,4 +30,4 @@ PHP browser driver for:
 ---
 
 # Documentation
-- (documentation.md)[documentation.md]
+- [documentation.md](documentation.md)
