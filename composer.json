@@ -1,5 +1,5 @@
 {
-  "name": "Wert1209yt/php-autonomous-browser",
+  "name": "wert1209yt/php-autonomous-browser",
   "description": "Autonomous browser automation using Swoole and CDP",
   "type": "library",
   "license": "MIT",
