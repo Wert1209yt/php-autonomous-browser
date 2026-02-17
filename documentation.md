@@ -22,7 +22,8 @@ Coroutine\run(function () {
 
     $browser = Browser::launch([
         "chrome_path" => "/usr/bin/chromium", // Your path
-        "debug_port" => 9222 // Debug port: Use any port that is not blocked by the system.
+        "debug_port" => 9222, // Debug port: Use any port that is not blocked by the system.
+        "profile_path" => "/profile"
     ]);
 
     $page = $browser->newPage();

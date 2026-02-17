@@ -13,7 +13,9 @@ class Browser
     {
         $port = $config['debug_port'] ?? 9222;
 
-        $cmd = "{$config['chrome_path']} --remote-debugging-port=$port --headless=new > /dev/null 2>&1 &";
+        $profile = $config['profile_path'] ?? __DIR__ '/generated/profile';
+
+        $cmd = "{$config['chrome_path']} --remote-debugging-port=$port --user-data-dir={$profile} --headless=new > /dev/null 2>&1 &";
         shell_exec($cmd);
 
         \Swoole\Coroutine::sleep(1);
