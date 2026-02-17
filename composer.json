@@ -1,0 +1,15 @@
+{
+  "name": "Wert1209yt/php-autonomous-browser",
+  "description": "Autonomous browser automation using Swoole and CDP",
+  "type": "library",
+  "license": "MIT",
+  "require": {
+    "php": ">=8.1",
+    "ext-swoole": "*"
+  },
+  "autoload": {
+    "psr-4": {
+      "Wert1209yt\\Browser\\": "src/"
+    }
+  }
+}
