@@ -67,9 +67,9 @@ Coroutine\run(function () {
 ### Methods:
 - universal element() (Recommended)
   - Universal element controller
-  - $page->element(".btn")->click();
-  - $page->element("#login")->type("hello");
-  - $page->element(".item", 2)->click();
+  - `$page->element(".btn")->click();`
+  - `$page->element("#login")->type("hello");`
+  - `$page->element(".item", 2)->click();`
 - waitUntilLoaded()
   - Wait until page loaded
 - clickOnButton()
@@ -78,3 +78,9 @@ Coroutine\run(function () {
 - insertInInput()
   - Insert text to input box
   - Example `$page->insertInInput(["class" => "signinbutton", "id" => "signin", "text" => "I'm using php-autonomous-browser"]);`
+- pressKey()
+  - Press keyboard key
+  - Example `$page->pressKey('a')`
+- holdKey()
+  - Hold keyboard key
+  - Example `$page->holdKey('a', 4)`, 4 is seconds

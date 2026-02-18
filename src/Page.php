@@ -45,6 +45,72 @@ class Page
         throw new \RuntimeException("Page load timeout");
     }
 
+    public function pressKey(string $key): void
+    {
+        $this->id++;
+
+    // keyDown
+        $this->connection->send([
+            "id" => $this->id,
+            "method" => "Input.dispatchKeyEvent",
+            "params" => [
+                "type" => "keyDown",
+                "key" => $key,
+                "code" => "Key" . strtoupper($key),
+                "windowsVirtualKeyCode" => ord(strtoupper($key)),
+                "nativeVirtualKeyCode" => ord(strtoupper($key))
+            ]
+        ]);
+
+        $this->id++;
+
+    // keyUp
+        $this->connection->send([
+            "id" => $this->id,
+            "method" => "Input.dispatchKeyEvent",
+            "params" => [
+                "type" => "keyUp",
+                "key" => $key,
+                "code" => "Key" . strtoupper($key),
+                "windowsVirtualKeyCode" => ord(strtoupper($key)),
+                "nativeVirtualKeyCode" => ord(strtoupper($key))
+            ]
+        ]);
+    }
+
+    public function holdKey(string $key, float $seconds = 1): void
+    {
+        $this->id++;
+
+        $this->connection->send([
+            "id" => $this->id,
+            "method" => "Input.dispatchKeyEvent",
+            "params" => [
+                "type" => "keyDown",
+                "key" => $key,
+                "code" => "Key" . strtoupper($key),
+                "windowsVirtualKeyCode" => ord(strtoupper($key)),
+                "nativeVirtualKeyCode" => ord(strtoupper($key))
+            ]
+        ]);
+
+        \Swoole\Coroutine::sleep($seconds);
+
+        $this->id++;
+
+        $this->connection->send([
+            "id" => $this->id,
+            "method" => "Input.dispatchKeyEvent",
+            "params" => [
+                "type" => "keyUp",
+                "key" => $key,
+                "code" => "Key" . strtoupper($key),
+                "windowsVirtualKeyCode" => ord(strtoupper($key)),
+                "nativeVirtualKeyCode" => ord(strtoupper($key))
+            ]
+        ]);
+    }
+
     public function clickOnButton(array $buttonInfo): void
     {
         $class = $buttonInfo['class'];
