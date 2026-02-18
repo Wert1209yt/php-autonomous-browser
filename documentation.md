@@ -61,6 +61,9 @@ Coroutine\run(function () {
 });
 ```
 
+>[!NOTE]
+> You can use HTTP or SOCKS5 proxy, just add in config (launch). Example: `"proxy" => ["url" => "http://127.0.0.1"]`
+
 ### Methods:
 - universal element() (Recommended)
   - Universal element controller
