@@ -13,6 +13,14 @@ class Page
         $cdp->send("DOM.enable");
     }
 
+    public function evaluate(string $expression)
+    {
+        $this->send("Runtime.evaluate", [
+            "expression" => $expression,
+            "returnByValue" => true
+        ]);
+    }
+
     public function navigate(string $url): void
     {
         $this->cdp->send("Page.navigate", ["url" => $url]);
@@ -37,29 +45,71 @@ class Page
         throw new \RuntimeException("Page load timeout");
     }
 
-    public function click(string $selector): void
+    public function clickOnButton(array $buttonInfo): void
     {
-        $this->cdp->send("Runtime.evaluate", [
-            "expression" => "
-                const el = document.querySelector('$selector');
-                if (!el) throw 'Element not found';
-                el.scrollIntoView();
-                el.click();
-            "
-        ]);
+        $class = $buttonInfo['class'];
+        $id = $buttonInfo['id'] ?? false;
+        $index = $buttonInfo['index'] ?? 0;
+
+        $js = <<<JS
+            (function(){
+                let elements = document.querySelectorAll(".$class");
+
+                if ($id) {
+                    let el = document.querySelector(".$class#$id");
+                    if (el) { el.click(); return true; }
+                    return false;
+                }
+
+                if (elements.length > $index) {
+                    elements[$index].click();
+                    return true;
+                }
+
+                return false;
+            })();
+        JS;
+
+        $this->evaluate($js);
     }
 
-    public function type(string $selector, string $text): void
+    public function insertInInput(array $inputInfo): void
     {
-        $this->cdp->send("Runtime.evaluate", [
-            "expression" => "
-                const el = document.querySelector('$selector');
-                if (!el) throw 'Element not found';
-                el.focus();
-                el.value = '$text';
-                el.dispatchEvent(new Event('input', { bubbles: true }));
-            "
-        ]);
+        $class = $inputInfo['class'];
+        $text = addslashes($inputInfo['text']);
+        $id = $inputInfo['id'];
+        $index = $inputInfo['index'] ?? 0;
+
+        $js = <<<JS
+            (function(){
+                let elements = document.querySelectorAll(".$class");
+
+                if ($id) {
+                    let el = document.querySelector(".$class#$id");
+                    if (el) {
+                        el.value = "$text";
+                        el.dispatchEvent(new Event('input', { bubbles: true }));
+                        return true;
+                    }
+                    return false;
+                }
+
+                if (elements.length > $index) {
+                    elements[$index].value = "$text";
+                    elements[$index].dispatchEvent(new Event('input', { bubbles: true }));
+                    return true;
+                }
+
+                return false;
+            })();
+        JS;
+
+        $this->evaluate($js);
+    }
+
+    public function element(string $selector, int $index = 0): Element
+    {
+        return new Element($this->connection, $selector, $index);
     }
 
     public function screenshot(string $file): void

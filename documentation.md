@@ -12,6 +12,7 @@
 
 ## Simple use
 
+### Chrome/Chromium use
 ```php
 require "vendor/autoload.php";
 
@@ -21,9 +22,11 @@ use Swoole\Coroutine;
 Coroutine\run(function () {
 
     $browser = Browser::launch([
-        "chrome_path" => "/usr/bin/chromium", // Your path
-        "debug_port" => 9222, // Debug port: Use any port that is not blocked by the system.
-        "profile_path" => "/profile"
+        "browser" => "chromium", // you can "chrome" or "chromium"
+        "chrome_command" => "chromium", // Your command to start to Chrome/Chromium, default "chromium"
+        "debug_port" => 9222, // Debug port: Use any port that is not blocked by the system, default 9222
+        "profile_path" => "/profile", // Profile: profile to save cookies, default "/generated/profile"
+        "headless" => true // Headless mode: true/false, default false
     ]);
 
     $page = $browser->newPage();
@@ -33,3 +36,42 @@ Coroutine\run(function () {
 
 });
 ```
+### Firefox use
+```php
+require "vendor/autoload.php";
+
+use Wert1209yt\Browser\Browser;
+use Swoole\Coroutine;
+
+Coroutine\run(function () {
+
+    $browser = Browser::launch([
+        "browser" => "firefox", // Firefox of course
+        "firefox_command" => "firefox", // Your command to start to Firefox
+        "debug_port" => 9222, // Debug port: Use any port that is not blocked by the system, default 9222
+        "profile_path" => "/profile", // Profile: profile to save cookies, default "/generated/profile"
+        "headless" => true // Headless mode: true/false, default false
+    ]);
+
+    $page = $browser->newPage();
+
+    $page->navigate("https://example.com"); // Navigating to site
+    $page->screenshot("example.png"); // Create screenshot from site page
+
+});
+```
+
+### Methods:
+- universal element() (Recommended)
+  - Universal element controller
+  - $page->element(".btn")->click();
+  - $page->element("#login")->type("hello");
+  - $page->element(".item", 2)->click();
+- waitUntilLoaded()
+  - Wait until page loaded
+- clickOnButton()
+  - Click on button
+  - Example `$page->clickOnButton(["class" => "signinbutton", "id" => "signin"]);` + you can add "index" argument, default "index" is 0
+- insertInInput()
+  - Insert text to input box
+  - Example `$page->insertInInput(["class" => "signinbutton", "id" => "signin", "text" => "I'm using php-autonomous-browser"]);`

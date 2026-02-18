@@ -1,5 +1,9 @@
 # PHP autonomous browser
 
+>[!NOTE]
+> We using CDP protocol, no chrome driver required!
+> This makes it quick and easy.
+
 PHP browser driver for:
 
 - Chrome/Chromium
